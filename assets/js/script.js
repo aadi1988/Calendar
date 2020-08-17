@@ -19,7 +19,19 @@ var isPastPresentFuture =  function(time){
     }
 }
 
-
+$(timeContainerEl).click(function(event){
+    console.log(event.target);
+    if ($(event.target).is("button") || $(event.target).is("i") ){
+        var id = $(event.target).data('save');
+        console.log(id);
+        var parent = ($(this).children(id-9)[id-9]);
+        var textDiv = ($(parent).children()[1]);
+        var text = $(textDiv).children(0);
+        if (text.val() === ""){
+              $("#myModal").modal();
+        }
+    }
+})
 
 var createTimeBlockFunc =  function(){
   
@@ -49,6 +61,11 @@ var createTimeBlockFunc =  function(){
     saveBtnEl.appendChild(text1);
     saveBtnEl.setAttribute('data-save',i);
     text1.setAttribute('data-save',i);
+    if (timeframe === "past"){
+        schedChangeEl.disabled = "true";
+        saveBtnEl.disabled = "true";
+        text1.disabled = "true";
+    }
     saveEl.appendChild(saveBtnEl);
     rowDivEl.appendChild(timeDivEl);
     rowDivEl.appendChild(schedDivEl);
