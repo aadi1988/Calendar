@@ -1,4 +1,5 @@
-var timeContainerEl = document.querySelector(".container")
+var timeContainerEl = document.querySelector(".container");
+var schedObj = {};
 var dayDisplay = function(){
     var pDisplay= document.querySelector("#currentDay");
     //Display the day in the page on the top
@@ -19,6 +20,27 @@ var isPastPresentFuture =  function(time){
     }
 }
 
+var loadSched = function(id){
+    console.log(JSON.parse(localStorage.getItem("schedObj"))[id]);
+    if (JSON.parse(localStorage.getItem("schedObj"))[id] !== null && JSON.parse(localStorage.getItem("schedObj"))[id] !== undefined){
+        schedObj = JSON.parse(localStorage.getItem("schedObj"));
+        console.log(schedObj);
+        var value  = schedObj[id];
+        return value
+    }
+    else{
+        console.log("entering here");
+        schedObj[id] = " ";
+        var value = " ";
+        return value;
+    }
+   
+}
+
+var saveSched = function(){
+    localStorage.setItem("schedObj",JSON.stringify(schedObj));
+}
+
 $(timeContainerEl).click(function(event){
     console.log(event.target);
     if ($(event.target).is("button") || $(event.target).is("i") ){
@@ -29,6 +51,12 @@ $(timeContainerEl).click(function(event){
         var text = $(textDiv).children(0);
         if (text.val() === ""){
               $("#myModal").modal();
+        }
+        else{
+            console.log(schedObj);
+            schedObj[id]=text.val();
+            console.log(schedObj);
+            saveSched();
         }
     }
 })
@@ -51,6 +79,8 @@ var createTimeBlockFunc =  function(){
     var schedChangeEl = document.createElement("textarea");
     schedChangeEl.className =  "textareaEl";
     schedChangeEl.setAttribute('data-time',i);
+    //console.dir(schedChangeEl);
+    schedChangeEl.value = loadSched(i);
     schedDivEl.appendChild(schedChangeEl);
     var saveEl = document.createElement("div");
     saveEl.classList = "col-lg-1 col-md-1 col-sm-1 saveEl";
@@ -61,11 +91,6 @@ var createTimeBlockFunc =  function(){
     saveBtnEl.appendChild(text1);
     saveBtnEl.setAttribute('data-save',i);
     text1.setAttribute('data-save',i);
-    if (timeframe === "past"){
-        schedChangeEl.disabled = "true";
-        saveBtnEl.disabled = "true";
-        text1.disabled = "true";
-    }
     saveEl.appendChild(saveBtnEl);
     rowDivEl.appendChild(timeDivEl);
     rowDivEl.appendChild(schedDivEl);
