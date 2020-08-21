@@ -54,11 +54,9 @@ $(timeContainerEl).click(function(event){
     console.log(event.target);
     if ($(event.target).is("button") || $(event.target).is("i") ){
         var id = $(event.target).data('save');
-        var parent = ($(this).children(id-9)[id-9]);
-        var textDiv = ($(parent).children()[1]);
-        var text = $(textDiv).children(0);
+        var rowEl = $(this).before().children()[id-9];
+        var text = $(rowEl).find("textarea");
         //Modal called asking user to enter a valid activity
-        console.log(text.val())
         if (text.val() === " "){
               $("#myModal").modal();
         }
