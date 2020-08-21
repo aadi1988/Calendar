@@ -7,7 +7,7 @@ var schedObj = {};
 var dayDisplay = function(){
     var pDisplay= $("#currentDay");
     //Display the day in the page on the top
-    $(pDisplay)[0].textContent = moment().format('dddd, MMMM Do');
+    $(pDisplay).text(moment().format('dddd, MMMM Do'));
 }
 
 //Check if current time is before 9AM, between 9 to 5 or after 5 PM
@@ -50,12 +50,10 @@ var saveSched = function(){
 
 
 //When save button is clicked, data is saved in the dictionary and in local storage
-$(timeContainerEl).click(function(event){
-    console.log(event.target);
-    if ($(event.target).is("button") || $(event.target).is("i") ){
-        var id = $(event.target).data('save');
-        var rowEl = $(this).before().children()[id-9];
-        var text = $(rowEl).find("textarea");
+$(timeContainerEl).on('click','.saveEl',function(event){
+
+        var id  = $(this).find('.saveBtn').data('save');
+        var text = $(this).prev().find('.textarea');
         //Modal called asking user to enter a valid activity
         if (text.val() === " "){
               $("#myModal").modal();
@@ -64,7 +62,7 @@ $(timeContainerEl).click(function(event){
             schedObj[id]=text.val();
             saveSched();
         }
-    }
+   // }
 })
 
 
@@ -80,8 +78,8 @@ var createTimeBlockFunc =  function(){
     var timeEl = $("<h3></h3>");
     $(timeEl).addClass("h3El");
     var time = moment().set({h:i}).format('h A');
-    $(timeEl)[0].textContent = time;
-    $(timeDivEl)[0].append($(timeEl)[0]);
+    $(timeEl).text(time);
+    $(timeDivEl).append($(timeEl));
     //Container to hold the schedule
     var schedDivEl =  $("<div></div>");
     var timeframe = isPastPresentFuture(i);
@@ -89,8 +87,8 @@ var createTimeBlockFunc =  function(){
     var schedChangeEl = $("<textarea></textarea>");
     $(schedChangeEl).addClass(["textarea","description"]);
     $(schedChangeEl).attr('data-time',i);
-    $(schedChangeEl)[0].textContent = loadSched(i); 
-    $(schedDivEl).append($(schedChangeEl)[0]);
+    $(schedChangeEl).text(loadSched(i)); 
+    $(schedDivEl).append($(schedChangeEl));
     //Save button
     var saveEl = $("<div></div>");
     $(saveEl).addClass(["col-lg-1", "col-md-1", "col-sm-12","saveEl"]);
@@ -102,13 +100,13 @@ var createTimeBlockFunc =  function(){
     $(saveBtnEl).append($(text1));
     $(saveBtnEl).attr('data-save',i);
     $(saveEl).append($(saveBtnEl));
-    var saveElcon = $(saveEl)[0];
+    
     //Add all to the main row container
-    rowDivEl.append($(timeDivEl)[0]);
-    rowDivEl.append($(schedDivEl)[0]);
-    rowDivEl.append($(saveElcon)[0]);
+    rowDivEl.append($(timeDivEl));
+    rowDivEl.append($(schedDivEl));
+    rowDivEl.append($(saveEl));
     //add the row container to the main container
-    timeContainerEl.append($(rowDivEl)[0]);
+    timeContainerEl.append($(rowDivEl));
   }  
 }
 
